@@ -11,8 +11,8 @@ patch(BinaryField.prototype, {
             currentPage: 1,
             // Will be determined when we fetch the PDF
             totalPages: null,
-            // cache of the generated PDF to avoid re-generation
-            // during prev/next navigations
+            // Cache PDF binary when fetched for the first time and
+            // avoids refetching on every prev/next navigations
             pdf: null,
         });
 
@@ -33,8 +33,12 @@ patch(BinaryField.prototype, {
     },
 
     async _initPdfViewer() {
-        const canvas = this._getPdfViewerCanvas();
         const pdf = await this._getPdf();
+        if (!pdf) {
+            // No PDF to render
+            return;
+        }
+        const canvas = this._getPdfViewerCanvas();
         this.state.totalPages = pdf.numPages;
         await this._renderPdf(pdf, canvas);
     },
@@ -42,6 +46,9 @@ patch(BinaryField.prototype, {
     async _getPdf() {
         const {resModel, resId} = this.props.record.model.config;
         const {name: binaryFieldName} = this.props;
+        if (!resId) {
+            return false;
+        }
         const pdfUrl = `/web/content/${resModel}/${resId}/${binaryFieldName}`;
         if (!this.state.pdf) {
             this.state.pdf = await pdfjsLib.getDocument(pdfUrl);
@@ -52,10 +59,9 @@ patch(BinaryField.prototype, {
     async _renderPdf(pdf, canvas, pageNumber = 1) {
         try {
             if (pageNumber > this.state.totalPages) {
-                // Don't render anything
+                // Page does not exist
                 return;
             }
-            console.log("pageNumber##", pageNumber);
             const page = await pdf.getPage(pageNumber);
             this.state.currentPage = pageNumber;
             const scale = 1.2;
@@ -74,7 +80,6 @@ patch(BinaryField.prototype, {
         } catch (error) {
             console.log("PDF rendering error: ", error.message);
         }
-        console.log("state", this.state);
     },
 
     async onPrevPage() {
