@@ -6,7 +6,7 @@ Current version is only a PoC and presently is able to achieve the above objecti
 
 ## Screenshots
 **Sample PDF - Page 1 of 3**
-![Screenshot 1 - Oz PDF Viewer](https://github.com/user-attachments/assets/be02896f-616e-4718-a055-60d9d65729c9)
+![Screenshot 1 - Oz PDF Viewer](https://github.com/user-attachments/assets/0e379712-b277-47e1-bc99-888306feea47)
 
 **Sample PDF - Page 2 of 3**
 ![Screenshot 2 - Oz PDF Viewer](https://github.com/user-attachments/assets/1a8e1341-662a-4fba-80ee-0e50243875cb)
