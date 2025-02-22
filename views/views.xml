@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="oz_document_form">
+            <field name="name">oz.document.form</field>
+            <field name="model">oz.document</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" invisible="0" />
+                            <field name="doc_file" filename="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="oz_document_list">
+            <field name="name">oz.document.list</field>
+            <field name="model">oz.document</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name" invisible="0" />
+                    <field name="doc_file" filename="name" />
+                </list>
+            </field>
+        </record>
+
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="oz_document_action">
+            <field name="name">Documents</field>
+            <field name="res_model">oz.document</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+
+        <!-- Top menu item -->
+        <menuitem name="Oz Documents" id="oz_menu_root" />
+
+        <!-- menu categories -->
+        <menuitem name="Documents" id="oz_menu" parent="oz_menu_root" action="oz_document_action" />
+
+    </data>
+</odoo>

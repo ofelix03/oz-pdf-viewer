@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" preserve="xml:space">
+    <t t-name="oz_pdf_viewer.PDFViewer" t-inherit="web.BinaryField" t-inherit-mode="extension">
+        <xpath expr="." position="inside">
+            <div t-if="props.record.data[props.name]">
+                <div style="display: inline-block; background: #ddd;">
+                    <div class="position-relative d-flex align-items-center" style="border: 1px solid rd; height: 30px">
+                        <div class="position-absolute d-flex justify-content-end gap-1" style="right: 10px;" >
+                            <span t-if="state.currentPage > 1" t-on-click="onPrevPage" style="cursor: pointer">Prev</span>
+                            <span t-on-click="onNextPage" t-if="state.currentPage &lt; state.totalPages" style="cursor: pointer">Next</span>
+                        </div>
+                        <div class="text-center w-100 fst-italic">
+                            Page: <span t-esc="state.currentPage" /> / <span t-esc="state.totalPages" />
+                        </div>
+                    </div>
+                    <canvas id="oz-pdf-viewer-canvas" class="border" />
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>
