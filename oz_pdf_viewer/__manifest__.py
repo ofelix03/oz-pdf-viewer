@@ -7,7 +7,7 @@
     "category": "Uncategorized",
     "version": "18.0.0.0.0",
     "depends": ["base"],
-    "data": [],
+    "data": ["security/ir.model.access.csv"],
     "assets": {
         "web.assets_backend": [
             "oz_pdf_viewer/static/src/views/**/*",

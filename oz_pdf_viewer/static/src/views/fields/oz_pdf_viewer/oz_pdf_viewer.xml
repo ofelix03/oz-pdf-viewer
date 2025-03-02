@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- <templates id="template" preserve="xml:space">
-    <t t-name="oz_pdf_viewer.PdfViewer" t-inherit="web.BinaryField" t-inherit-mode="extension">
-        <xpath expr="." position="inside">
-            <div t-if="state.pdf">
-                <div style="display: inline-block; background: #ddd;">
-                    <div class="position-relative d-flex align-items-center" style="border: 1px solid rd; height: 30px">
-                        <div class="position-absolute d-flex justify-content-end gap-1" style="right: 10px;" >
-                            <span t-if="state.currentPage > 1" t-on-click="onPrevPage" style="cursor: pointer">Prev</span>
-                            <span t-on-click="onNextPage" t-if="state.currentPage &lt; state.totalPages" style="cursor: pointer">Next</span>
-                        </div>
-                        <div class="text-center w-100 fst-italic">
-                            Page: <span t-esc="state.currentPage" /> / <span t-esc="state.totalPages" />
-                        </div>
-                    </div>
-                    <canvas id="oz-pdf-viewer-canvas" class="border" />
-                </div>
-            </div>
-        </xpath>
-    </t>
-</templates> -->
-
-
 <templates id="template" preserve="xml:space">
     <t t-name="oz_pdf_viewer.PdfViewer">
-        <div t-att-class="{'invisible': state.pdf == false}">
+        <t t-if="!props.readonly">
+            <div class="o_form_pdf_controls d-flex gap-1">
+                <t t-if="props.record.data[props.name]">
+                    <FileUploader
+                        acceptedFileExtensions="'.pdf'"
+                        onUploaded.bind="onFileUploaded"
+                    >
+                        <t t-set-slot="toggler">
+                            <button
+                                class="btn btn-secondary fa fa-pencil o_select_file_button"
+                                data-tooltip="Edit"
+                                aria-label="Edit"
+                            />
+                        </t>
+                        <button
+                            class="btn btn-secondary fa fa-trash o_clear_file_button"
+                            data-tooltip="Clear"
+                            aria-label="Clear"
+                            t-on-click="onFileRemove"
+                        />
+                    </FileUploader>
+                </t>
+                <t t-else="">
+                    <label class="o_select_file_button btn btn-primary">
+                        <FileUploader
+                            acceptedFileExtensions="'.pdf'"
+                            onUploaded.bind="onFileUploaded"
+                        >
+                            <t t-set-slot="toggler">
+                                Upload your file
+                            </t>
+                        </FileUploader>
+                    </label>
+                </t>
+            </div>
+        </t>
+        <div class="mt-1">
             <div style="display: inline-block; background: #ddd;">
-                <div class="position-relative d-flex align-items-center"
+                <div  t-att-class="{'d-none': state.pdf == null}" class="position-relative d-flex align-items-center"
                     style="border: 1px solid rd; height: 30px">
-                    <div class="position-absolute d-flex justify-content-end gap-1"
+                    <div  class="position-absolute d-flex justify-content-end gap-1"
                         style="right: 10px;">
                         <span t-if="state.currentPage > 1" t-on-click="onPrevPage"
-                            style="cursor: pointer">Prev</span>
+                            style="cursor: pointer" class="fa fa-angle-left fa-2x  me-3" title="Previous Page" />
                         <span t-on-click="onNextPage" t-if="state.currentPage &lt; state.totalPages"
-                            style="cursor: pointer">Next</span>
+                            style="cursor: pointer" class="fa fa-angle-right fa-2x" title="Next Page" />
                     </div>
                     <div class="text-center w-100 fst-italic"> Page: <span t-esc="state.currentPage" />
                         / <span t-esc="state.totalPages" />
                     </div>
                 </div>
-                <canvas id="oz-pdf-viewer-canvas" t-ref="oz-pdf-viewer-canvas" class="border" />
+                <canvas  t-att-style="{'display': 'none'} "  t-ref="oz-pdf-viewer-canvas" class="border" />
             </div>
         </div>
     </t>
