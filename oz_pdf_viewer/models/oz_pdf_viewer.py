@@ -7,7 +7,7 @@ class OzPdfViewer(models.TransientModel):
     _description = "Oz PDF Viewer"
 
     @api.model
-    def get_file_base64encoded(self, res_model, res_id):
+    def get_file_data(self, res_model, res_id):
         """Returns base64 encoded data of the attachment"""
         if res_model and res_id:
             query = """

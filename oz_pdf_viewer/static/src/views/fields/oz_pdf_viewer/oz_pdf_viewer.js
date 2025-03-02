@@ -77,7 +77,7 @@ export class OzPdfViewer extends Component {
         const {resModel, resId} = this.props.record;
         if (pdfData == null && resId) {
             // Fetch PDF data from the
-            pdfData = await this.orm.call("oz.pdf.viewer", "get_file_base64encoded", [
+            pdfData = await this.orm.call("oz.pdf.viewer", "get_file_data", [
                 resModel,
                 resId,
             ]);
@@ -111,7 +111,7 @@ export class OzPdfViewer extends Component {
                 viewport: viewport,
             };
             await page.render(renderContext).promise;
-            console.log("pag rendered");
+            console.log("Page rendered");
             this.state.renderPdf = false;
         } catch (error) {
             console.log("PDF rendering error: ", error.message);
@@ -132,8 +132,8 @@ export class OzPdfViewer extends Component {
         await this._renderPdf(pdf, canvas, nextPage);
     }
 
-    onFileUploaded({data, objectUrl}) {
-        this.update({data});
+    onFileUploaded({data, name, objectUrl}) {
+        this.update({data, name});
         this._initPdfViewer(data);
     }
 
@@ -142,8 +142,12 @@ export class OzPdfViewer extends Component {
         this.update({});
     }
 
-    update({data}) {
+    update({data, name}) {
         const changes = {[this.props.name]: data || false};
+        const {fileNameField, record} = this.props;
+        if (fileNameField in record.fields && record.data[fileNameField] !== name) {
+            changes[fileNameField] = name || false;
+        }
         return this.props.record.update(changes);
     }
 }
@@ -154,8 +158,15 @@ OzPdfViewer.components = {
 };
 OzPdfViewer.props = {
     ...standardFieldProps,
+    fileNameField: {type: String, optional: true},
 };
 OzPdfViewer.displayName = _lt("Oz PDF Viewer");
 OzPdfViewer.supportedTypes = ["binary"];
+
+OzPdfViewer.extractProps = ({attrs}) => {
+    return {
+        fileNameField: attrs.filename,
+    };
+};
 
 registry.category("fields").add("oz_pdf_viewer", OzPdfViewer);
