@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oz_pdf_viewer_user,oz.pdf.viewer.user,model_oz_pdf_viewer,base.group_user,1,1,1,1
